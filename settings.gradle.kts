@@ -19,5 +19,20 @@ dependencyResolutionManagement {
     }
 }
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 rootProject.name = "Runmaster"
 include(":app")
+include(":auth:data")
+include(":auth:domain")
+include(":auth:presentation")
+include(":run:data")
+include(":run:presentation")
+include(":run:domain")
+include(":core:presentation:designsystem")
+include(":core:presentation:ui")
+include(":core:domain")
+include(":core:data")
+include(":core:database")
+include(":run:location")
+include(":run:network")
