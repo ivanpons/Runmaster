@@ -20,5 +20,15 @@ gradlePlugin{
             id = "runmaster.android.application"
             implementationClass = "AndroidApplicationConventionPlugin"
         }
+
+        register("androidApplicationCompose") {
+            id = "runmaster.android.application.compose"
+            implementationClass = "AndroidApplicationComposeConventionPlugin"
+        }
+
+        register("androidLibrary") {
+            id = "runmaster.android.library"
+            implementationClass = "AndroidLibraryConventionPlugin"
+        }
     }
 }

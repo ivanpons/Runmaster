@@ -1,6 +1,5 @@
 plugins {
-    alias(libs.plugins.runmaster.android.application)
-    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.runmaster.android.application.compose)
 }
 
 android {

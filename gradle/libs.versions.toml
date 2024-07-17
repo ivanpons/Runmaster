@@ -129,6 +129,8 @@ mapsplatform-secrets-plugin = { id = "com.google.android.libraries.mapsplatform.
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
 runmaster-android-application = {id = "runmaster.android.application", version = "unspecified"}
+runmaster-android-application-compose = { id = "runmaster.android.application.compose", version = "unspecified" }
+runmaster-android-library = {id = "runmaster.android.library", version = "unspecified"}
 
 
 [bundles]
