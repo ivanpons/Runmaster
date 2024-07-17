@@ -128,6 +128,8 @@ androidDynamicFeature = { id = "com.android.dynamic-feature", version.ref = "agp
 mapsplatform-secrets-plugin = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secretsPlugin"}
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
+runmaster-android-application = {id = "runmaster.android.application", version = "unspecified"}
+
 
 [bundles]
 compose = [
