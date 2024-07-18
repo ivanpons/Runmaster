@@ -1,6 +1,6 @@
 plugins {
-    alias(libs.plugins.runmaster.android.application)
-    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.runmaster.android.application.compose)
+    alias(libs.plugins.runmaster.jvm.ktor)
 }
 
 android {
