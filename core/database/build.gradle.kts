@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.runmaster.android.library)
+    alias(libs.plugins.runmaster.android.room)
 }
 
 android {

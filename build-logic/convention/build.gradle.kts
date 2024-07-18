@@ -13,7 +13,6 @@ dependencies {
     compileOnly(libs.room.gradlePlugin)
 }
 
-
 gradlePlugin{
     plugins{
         register("androidApplication") {
@@ -29,6 +28,31 @@ gradlePlugin{
         register("androidLibrary") {
             id = "runmaster.android.library"
             implementationClass = "AndroidLibraryConventionPlugin"
+        }
+
+        register("androidLibraryCompose") {
+            id = "runmaster.android.library.compose"
+            implementationClass = "AndroidLibraryComposeConventionPlugin"
+        }
+
+        register("androidFeatureUi") {
+            id = "runmaster.android.feature.ui"
+            implementationClass = "AndroidFeatureUIConventionPlugin"
+        }
+
+        register("androidRoom") {
+            id = "runmaster.android.room"
+            implementationClass = "AndroidRoomConventionPlugin"
+        }
+
+        register("jvmLibrary") {
+            id = "runmaster.jvm.library"
+            implementationClass = "JvmLibraryConventionPlugin"
+        }
+
+        register("jvmKtor") {
+            id = "runmaster.jvm.ktor"
+            implementationClass = "JvmKtorConventionPlugin"
         }
     }
 }
