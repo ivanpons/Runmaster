@@ -167,7 +167,7 @@ private fun LoginActionScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(100.dp),
+                    .height(200.dp),
                 contentAlignment = Alignment.BottomCenter
             ){
                 ClickableText(

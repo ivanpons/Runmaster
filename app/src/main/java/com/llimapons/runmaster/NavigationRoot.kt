@@ -15,15 +15,15 @@ import androidx.navigation.navigation
 import com.llimapons.auth.presentation.intro.IntroScreenRoot
 import com.llimapons.auth.presentation.login.LoginScreenRoot
 import com.llimapons.auth.presentation.register.RegisterScreenRoot
-import io.ktor.utils.io.bits.Allocator
 
 @Composable
 fun NavigationRoot(
     navController: NavHostController,
+    isLoggedIn: Boolean,
 ) {
     NavHost(
         navController = navController,
-        startDestination = "auth"
+        startDestination = if (isLoggedIn) "run" else "auth"
     ) {
         authGraph(navController)
         runGraph(navController)
