@@ -8,26 +8,27 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.llimapons.auth.presentation.intro.IntroScreenRoot
+import com.llimapons.auth.presentation.login.LoginScreenRoot
 import com.llimapons.auth.presentation.register.RegisterScreenRoot
 
 @Composable
 fun NavigationRoot(
     navController: NavHostController,
-    ){
+) {
     NavHost(
         navController = navController,
         startDestination = "auth"
-    ){
+    ) {
         authGraph(navController)
     }
 }
 
-private fun NavGraphBuilder.authGraph(navController: NavHostController){
+private fun NavGraphBuilder.authGraph(navController: NavHostController) {
     navigation(
         startDestination = "intro",
         route = "auth"
-    ){
-        composable(route = "intro"){
+    ) {
+        composable(route = "intro") {
             IntroScreenRoot(
                 onSignUpClick = {
                     navController.navigate("register")
@@ -37,11 +38,11 @@ private fun NavGraphBuilder.authGraph(navController: NavHostController){
                 }
             )
         }
-        composable(route = "register"){
+        composable(route = "register") {
             RegisterScreenRoot(
                 onSignInClick = {
-                    navController.navigate("login"){
-                        popUpTo("register"){
+                    navController.navigate("login") {
+                        popUpTo("register") {
                             inclusive = true
                             saveState = true
                         }
@@ -53,8 +54,25 @@ private fun NavGraphBuilder.authGraph(navController: NavHostController){
                 }
             )
         }
-        composable(route = "login"){
-            Text(text = "Login")
+        composable(route = "login") {
+            LoginScreenRoot(
+                onLoginSuccess = {
+                    navController.navigate("run") {
+                        popUpTo("auth") {
+                            inclusive = true
+                        }
+                    }
+                },
+                onSignUpClick = {
+                    navController.navigate("register") {
+                        popUpTo("login") {
+                            inclusive = true
+                            saveState = true
+                        }
+                        restoreState = true
+                    }
+                }
+            )
         }
 
     }
