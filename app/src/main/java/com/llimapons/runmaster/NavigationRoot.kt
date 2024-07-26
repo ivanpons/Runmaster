@@ -15,6 +15,7 @@ import androidx.navigation.navigation
 import com.llimapons.auth.presentation.intro.IntroScreenRoot
 import com.llimapons.auth.presentation.login.LoginScreenRoot
 import com.llimapons.auth.presentation.register.RegisterScreenRoot
+import com.llimapons.presentation.run_overview.RunOverviewScreenRoot
 
 @Composable
 fun NavigationRoot(
@@ -90,14 +91,7 @@ private fun NavGraphBuilder.runGraph(navController: NavHostController) {
         route = "run"
     ) {
         composable(route = "run_overview") {
-           Box(
-               modifier = Modifier
-                   .fillMaxSize()
-                   .background(color = androidx.compose.ui.graphics.Color.Blue),
-               contentAlignment = Alignment.Center
-           ){
-               Text(text = "Run Overview")
-           }
+         RunOverviewScreenRoot()
         }
     }
 }

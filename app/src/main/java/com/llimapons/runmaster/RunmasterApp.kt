@@ -4,6 +4,7 @@ import android.app.Application
 import com.llimapons.auth.data.di.authDataModule
 import com.llimapons.auth.presentation.di.authViewModelModule
 import com.llimapons.core.data.di.coreDataModule
+import com.llimapons.presentation.di.runViewModelModule
 import com.llimapons.runmaster.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -26,6 +27,7 @@ class RunmasterApp: Application() {
                 authViewModelModule,
                 appModule,
                 coreDataModule,
+                runViewModelModule
             )
         }
     }
