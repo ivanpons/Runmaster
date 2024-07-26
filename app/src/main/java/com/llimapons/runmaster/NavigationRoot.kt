@@ -1,12 +1,6 @@
 package com.llimapons.runmaster
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -15,6 +9,7 @@ import androidx.navigation.navigation
 import com.llimapons.auth.presentation.intro.IntroScreenRoot
 import com.llimapons.auth.presentation.login.LoginScreenRoot
 import com.llimapons.auth.presentation.register.RegisterScreenRoot
+import com.llimapons.presentation.run_active.ActiveRunScreenRoot
 import com.llimapons.presentation.run_overview.RunOverviewScreenRoot
 
 @Composable
@@ -91,7 +86,18 @@ private fun NavGraphBuilder.runGraph(navController: NavHostController) {
         route = "run"
     ) {
         composable(route = "run_overview") {
-         RunOverviewScreenRoot()
+         RunOverviewScreenRoot(
+             onStartRunClick = {
+                 navController.navigate("active_run")
+             }
+         )
+        }
+        composable(route = "active_run"){
+            ActiveRunScreenRoot(
+                onBackClick = {
+                    navController.navigateUp()
+                }
+            )
         }
     }
 }
