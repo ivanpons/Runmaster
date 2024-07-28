@@ -31,6 +31,7 @@ import com.llimapons.core.presentation.designsystem.components.RunmasterOutlinen
 import com.llimapons.core.presentation.designsystem.components.RunmasterScaffold
 import com.llimapons.core.presentation.designsystem.components.RunmasterToolbar
 import com.llimapons.presentation.run_active.components.RunDataCard
+import com.llimapons.presentation.run_active.maps.TrackerMap
 import com.llimapons.presentation.util.hasLocationPermission
 import com.llimapons.presentation.util.hasNotificationPermission
 import com.llimapons.presentation.util.hasPermission
@@ -148,6 +149,14 @@ private fun ActiveRunEventScreen(
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.surface),
         ){
+            TrackerMap(
+                isRunFinished = state.isRunFinished,
+                currentLocation = state.currentLocation,
+                locations = state.runData.locations,
+                onSnapshot = {},
+                modifier = Modifier
+                    .fillMaxSize()
+            )
             RunDataCard(
                 elapsedTime = state.elapsedTime,
                 runData = state.runData,
