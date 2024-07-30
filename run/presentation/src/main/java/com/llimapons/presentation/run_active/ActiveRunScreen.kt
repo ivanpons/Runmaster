@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.llimapons.core.presentation.designsystem.RunmasterTheme
 import com.llimapons.core.presentation.designsystem.StartIcon
 import com.llimapons.core.presentation.designsystem.StopIcon
+import com.llimapons.core.presentation.designsystem.components.RunmasterActionButton
 import com.llimapons.core.presentation.designsystem.components.RunmasterDialog
 import com.llimapons.core.presentation.designsystem.components.RunmasterFloatingActionButton
 import com.llimapons.core.presentation.designsystem.components.RunmasterOutlinenButton
@@ -47,8 +48,8 @@ fun ActiveRunScreenRoot(
 ) {
     ActiveRunEventScreen(
         state = viewModel.state,
-        onAction = {action ->
-            when(action){
+        onAction = { action ->
+            when (action) {
                 ActiveRunAction.OnBackClick -> onBackClick()
                 else -> Unit
             }
@@ -91,7 +92,7 @@ private fun ActiveRunEventScreen(
         )
     }
 
-    LaunchedEffect(key1 = true){
+    LaunchedEffect(key1 = true) {
         val activity = context as ComponentActivity
         val showLocationRationale = activity.shouldShowLocationPermissionRationale()
         val showNotificationRational = activity.shouldShowNotificationPermissionRationale()
@@ -109,7 +110,7 @@ private fun ActiveRunEventScreen(
             )
         )
 
-        if(!showLocationRationale && !showNotificationRational){
+        if (!showLocationRationale && !showNotificationRational) {
             permissionLauncher.requestRuniquePermissions(context)
         }
     }
@@ -127,18 +128,18 @@ private fun ActiveRunEventScreen(
         },
         floatingActionButton = {
             RunmasterFloatingActionButton(
-                icon = if(state.shouldTrack) {
+                icon = if (state.shouldTrack) {
                     StopIcon
-                } else{
+                } else {
                     StartIcon
                 },
                 onClick = {
                     onAction(ActiveRunAction.OnToggleRunClick)
                 },
                 iconSize = 20.dp,
-                contentDescription = if(state.shouldTrack) {
+                contentDescription = if (state.shouldTrack) {
                     stringResource(id = R.string.pause_run)
-                }else{
+                } else {
                     stringResource(id = R.string.start_run)
                 }
             )
@@ -148,7 +149,7 @@ private fun ActiveRunEventScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.surface),
-        ){
+        ) {
             TrackerMap(
                 isRunFinished = state.isRunFinished,
                 currentLocation = state.currentLocation,
@@ -168,17 +169,49 @@ private fun ActiveRunEventScreen(
 
     }
 
-    if (state.showLocationRationale || state.showNotificationRationale){
+    if (!state.shouldTrack && state.hasStartedRunning) {
+        RunmasterDialog(
+            title = stringResource(id = R.string.running_is_paused),
+            onDismiss = {
+                onAction(ActiveRunAction.OnResumeRunClick)
+            },
+            description = stringResource(id = R.string.resume_or_finish_run),
+            primaryButton = {
+                RunmasterActionButton(
+                    text = stringResource(id = R.string.resume),
+                    isLoading = false,
+                    onClick = {
+                        onAction(ActiveRunAction.OnResumeRunClick)
+                    },
+                    modifier = Modifier.weight(1f)
+                )
+            },
+            secondaryButton = {
+                RunmasterOutlinenButton(
+                    text = stringResource(id = R.string.finish),
+                    isLoading = state.isSavingRun,
+                    onClick = {
+                        onAction(ActiveRunAction.OnFinishRunClick)
+                    },
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        )
+    }
+
+    if (state.showLocationRationale || state.showNotificationRationale) {
         RunmasterDialog(
             title = stringResource(id = R.string.permission_required),
-            onDismiss = { /* Dissmis not allowed */},
+            onDismiss = { /* Dissmis not allowed */ },
             description = when {
-                state.showLocationRationale && state.showNotificationRationale ->{
+                state.showLocationRationale && state.showNotificationRationale -> {
                     stringResource(id = R.string.location_notification_rationale)
                 }
+
                 state.showLocationRationale -> {
                     stringResource(id = R.string.location_rationale)
                 }
+
                 else -> {
                     stringResource(id = R.string.notification_rationale)
                 }
@@ -199,7 +232,7 @@ private fun ActiveRunEventScreen(
 
 private fun ActivityResultLauncher<Array<String>>.requestRuniquePermissions(
     context: Context
-){
+) {
     val hasLocationPermission = context.hasLocationPermission()
     val hasNotificationPermission = context.hasNotificationPermission()
     val locationPermissions = arrayOf(
@@ -210,13 +243,15 @@ private fun ActivityResultLauncher<Array<String>>.requestRuniquePermissions(
         arrayOf(Manifest.permission.POST_NOTIFICATIONS)
     } else emptyArray()
 
-    when{
+    when {
         !hasLocationPermission && !hasNotificationPermission -> {
             launch(locationPermissions + notificationPermissions)
         }
+
         !hasLocationPermission -> {
             launch(locationPermissions)
         }
+
         !hasNotificationPermission -> {
             launch(notificationPermissions)
         }
