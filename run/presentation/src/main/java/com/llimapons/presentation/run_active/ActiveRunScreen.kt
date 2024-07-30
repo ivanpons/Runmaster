@@ -33,6 +33,7 @@ import com.llimapons.core.presentation.designsystem.components.RunmasterScaffold
 import com.llimapons.core.presentation.designsystem.components.RunmasterToolbar
 import com.llimapons.presentation.run_active.components.RunDataCard
 import com.llimapons.presentation.run_active.maps.TrackerMap
+import com.llimapons.presentation.run_active.service.ActiveRunService
 import com.llimapons.presentation.util.hasLocationPermission
 import com.llimapons.presentation.util.hasNotificationPermission
 import com.llimapons.presentation.util.hasPermission
@@ -44,10 +45,12 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun ActiveRunScreenRoot(
     onBackClick: () -> Unit = {},
+    onServiceToggle: (isServiceRunning: Boolean) -> Unit,
     viewModel: ActiveRunViewModel = koinViewModel()
 ) {
     ActiveRunEventScreen(
         state = viewModel.state,
+        onServiceToggle = onServiceToggle,
         onAction = { action ->
             when (action) {
                 ActiveRunAction.OnBackClick -> onBackClick()
@@ -61,6 +64,7 @@ fun ActiveRunScreenRoot(
 @Composable
 private fun ActiveRunEventScreen(
     state: ActiveRunState,
+    onServiceToggle: (isServiceRunning: Boolean) -> Unit,
     onAction: (ActiveRunAction) -> Unit
 ) {
     val context = LocalContext.current
@@ -112,6 +116,18 @@ private fun ActiveRunEventScreen(
 
         if (!showLocationRationale && !showNotificationRational) {
             permissionLauncher.requestRuniquePermissions(context)
+        }
+    }
+
+    LaunchedEffect(key1 = state.isRunFinished) {
+        if(state.isRunFinished){
+            onServiceToggle(false)
+        }
+    }
+
+    LaunchedEffect(key1 = state.shouldTrack) {
+        if(context.hasLocationPermission() && state.shouldTrack && !ActiveRunService.isServiceActive){
+            onServiceToggle(true)
         }
     }
 
@@ -264,7 +280,8 @@ private fun ActiveRunEventScreenPreview() {
     RunmasterTheme {
         ActiveRunEventScreen(
             state = ActiveRunState(),
-            onAction = {}
+            onAction = {},
+            onServiceToggle = {}
         )
     }
 }
