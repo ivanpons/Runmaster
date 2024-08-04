@@ -68,7 +68,7 @@ fun RunListItem(
     var showDropDown by remember {
         mutableStateOf(false)
     }
-    Box(){
+    Box {
         Column(
             modifier = modifier
                 .clip(RoundedCornerShape(15.dp))

@@ -4,7 +4,9 @@ package com.llimapons.presentation.run_active
 
 import android.Manifest
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Build
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
@@ -31,6 +33,7 @@ import com.llimapons.core.presentation.designsystem.components.RunmasterFloating
 import com.llimapons.core.presentation.designsystem.components.RunmasterOutlinenButton
 import com.llimapons.core.presentation.designsystem.components.RunmasterScaffold
 import com.llimapons.core.presentation.designsystem.components.RunmasterToolbar
+import com.llimapons.core.presentation.ui.ObserveAsEvents
 import com.llimapons.presentation.run_active.components.RunDataCard
 import com.llimapons.presentation.run_active.maps.TrackerMap
 import com.llimapons.presentation.run_active.service.ActiveRunService
@@ -41,19 +44,40 @@ import com.llimapons.presentation.util.shouldShowLocationPermissionRationale
 import com.llimapons.presentation.util.shouldShowNotificationPermissionRationale
 import com.llimapons.run.presentation.R
 import org.koin.androidx.compose.koinViewModel
+import java.io.ByteArrayOutputStream
 
 @Composable
 fun ActiveRunScreenRoot(
-    onBackClick: () -> Unit = {},
+    onFinished: () -> Unit,
+    onBackClick: () -> Unit,
     onServiceToggle: (isServiceRunning: Boolean) -> Unit,
     viewModel: ActiveRunViewModel = koinViewModel()
 ) {
+
+    val context = LocalContext.current
+    ObserveAsEvents(flow = viewModel.events) { event ->
+        when(event){
+            is ActiveRunEvent.Error -> {
+                Toast.makeText(
+                    context,
+                    event.error.asString(context),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+            ActiveRunEvent.RunSaved -> onFinished()
+        }
+    }
+
     ActiveRunEventScreen(
         state = viewModel.state,
         onServiceToggle = onServiceToggle,
         onAction = { action ->
             when (action) {
-                ActiveRunAction.OnBackClick -> onBackClick()
+                ActiveRunAction.OnBackClick -> {
+                    if(!viewModel.state.hasStartedRunning) {
+                        onBackClick()
+                    }
+                }
                 else -> Unit
             }
             viewModel.onAction(action)
@@ -120,13 +144,13 @@ private fun ActiveRunEventScreen(
     }
 
     LaunchedEffect(key1 = state.isRunFinished) {
-        if(state.isRunFinished){
+        if (state.isRunFinished) {
             onServiceToggle(false)
         }
     }
 
     LaunchedEffect(key1 = state.shouldTrack) {
-        if(context.hasLocationPermission() && state.shouldTrack && !ActiveRunService.isServiceActive){
+        if (context.hasLocationPermission() && state.shouldTrack && !ActiveRunService.isServiceActive) {
             onServiceToggle(true)
         }
     }
@@ -170,7 +194,17 @@ private fun ActiveRunEventScreen(
                 isRunFinished = state.isRunFinished,
                 currentLocation = state.currentLocation,
                 locations = state.runData.locations,
-                onSnapshot = {},
+                onSnapshot = { bitmap ->
+                    val stream = ByteArrayOutputStream()
+                    stream.use {
+                        bitmap.compress(
+                            Bitmap.CompressFormat.JPEG,
+                            80,
+                            it
+                        )
+                    }
+                    onAction(ActiveRunAction.OnRunProcessed(stream.toByteArray()))
+                },
                 modifier = Modifier
                     .fillMaxSize()
             )
