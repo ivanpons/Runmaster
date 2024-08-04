@@ -7,17 +7,26 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.llimapons.core.domain.run.RunRepository
 import com.llimapons.presentation.run_overview.mapper.toRunUi
+import com.llimapons.core.domain.run.SyncRunScheduler
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.minutes
 
 class RunOverviewViewModel(
-    private val runRepository: RunRepository
+    private val runRepository: RunRepository,
+    private val syncRunScheduler: SyncRunScheduler
 ): ViewModel() {
 
     var state by mutableStateOf(RunOverviewState())
 
     init {
+        viewModelScope.launch {
+            syncRunScheduler.scheduleSync(
+                syncType = SyncRunScheduler.SyncType.FetchRuns(interval = 30.minutes)
+            )
+        }
+
         runRepository.getRuns()
             .onEach { runs ->
                 val runsUi = runs.map { it.toRunUi() }
@@ -25,6 +34,7 @@ class RunOverviewViewModel(
             }.launchIn(viewModelScope)
 
         viewModelScope.launch {
+            runRepository.syncPendingRuns()
             runRepository.fetchRuns()
         }
     }

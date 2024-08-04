@@ -6,6 +6,7 @@ import com.llimapons.auth.presentation.di.authViewModelModule
 import com.llimapons.core.data.di.coreDataModule
 import com.llimapons.core.database.di.dataBaseModule
 import com.llimapons.presentation.di.runPresentationModule
+import com.llimapons.run.data.di.runDataModule
 import com.llimapons.run.di.networkModule
 import com.llimapons.run.location.di.locationModule
 import com.llimapons.runmaster.di.appModule
@@ -13,6 +14,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
+import org.koin.androidx.workmanager.koin.workManagerFactory
 import org.koin.core.context.startKoin
 import timber.log.Timber
 
@@ -29,6 +31,7 @@ class RunmasterApp: Application() {
         startKoin {
             androidLogger()
             androidContext(this@RunmasterApp)
+            workManagerFactory()
             modules(
                 authDataModule,
                 authViewModelModule,
@@ -37,7 +40,8 @@ class RunmasterApp: Application() {
                 runPresentationModule,
                 locationModule,
                 dataBaseModule,
-                networkModule
+                networkModule,
+                runDataModule
             )
         }
     }
