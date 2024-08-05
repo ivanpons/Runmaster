@@ -134,6 +134,7 @@ runmaster-android-library = {id = "runmaster.android.library", version = "unspec
 runmaster-android-library-compose = {id = "runmaster.android.library.compose", version = "unspecified"}
 runmaster-android-feature-ui = {id = "runmaster.android.feature.ui", version = "unspecified"}
 runmaster-android-room = {id = "runmaster.android.room", version = "unspecified"}
+runmaster-android-dynamic-feature = {id = "runmaster.android.dynamic.feature", version = "unspecified"}
 runmaster-jvm-library = {id = "runmaster.jvm.library", version = "unspecified"}
 runmaster-jvm-ktor = {id = "runmaster.jvm.ktor", version = "unspecified"}
 

@@ -40,6 +40,11 @@ gradlePlugin{
             implementationClass = "AndroidFeatureUIConventionPlugin"
         }
 
+        register("androidDynamicFeature") {
+            id = "runmaster.android.dynamic.feature"
+            implementationClass = "AndroidDynamicFeatureConventionPlugin"
+        }
+
         register("androidRoom") {
             id = "runmaster.android.room"
             implementationClass = "AndroidRoomConventionPlugin"
