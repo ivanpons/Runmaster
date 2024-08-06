@@ -1,6 +1,8 @@
 package com.llimapons.runmaster
 
 import android.app.Application
+import android.content.Context
+import com.google.android.play.core.splitcompat.SplitCompat
 import com.llimapons.auth.data.di.authDataModule
 import com.llimapons.auth.presentation.di.authViewModelModule
 import com.llimapons.core.data.di.coreDataModule
@@ -44,5 +46,10 @@ class RunmasterApp: Application() {
                 runDataModule
             )
         }
+    }
+
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+        SplitCompat.install(this)
     }
 }

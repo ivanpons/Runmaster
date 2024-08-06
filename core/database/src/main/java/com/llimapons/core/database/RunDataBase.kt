@@ -2,6 +2,7 @@ package com.llimapons.core.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import com.llimapons.core.database.dao.AnalyticsDao
 import com.llimapons.core.database.dao.RunDao
 import com.llimapons.core.database.dao.RunPendingSyncDao
 import com.llimapons.core.database.entity.DeleteRunSyncEntity
@@ -20,5 +21,6 @@ abstract class RunDataBase : RoomDatabase() {
 
     abstract val runDao: RunDao
     abstract val runPendingSyncDao: RunPendingSyncDao
+    abstract val analyticsDao: AnalyticsDao
 
 }
