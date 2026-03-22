@@ -20,6 +20,8 @@ dependencyResolutionManagement {
     }
 }
 
+gradle.startParameter.excludedTaskNames.addAll(listOf(":build-logic:convention:testClasses"))
+
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "Runmaster"
@@ -37,3 +39,7 @@ include(":core:data")
 include(":core:database")
 include(":run:location")
 include(":run:network")
+include(":analytics:data")
+include(":analytics:domain")
+include(":analytics:presentation")
+include(":analytics:analytics_feature")
